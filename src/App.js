@@ -1,26 +1,40 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Suspense } from 'react';
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  Redirect,
+} from 'react-router-dom';
+import { CircularProgress } from '@material-ui/core';
 
-function App() {
+// import components
+import Header from './Components/Header/Header';
+import ProductList from './Components/Products/ProductList';
+
+// Lazy import
+const Cart = React.lazy(() => import('./Components/Cart/Cart'));
+
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+    <Router>
+      <header>
+        <Header />
       </header>
-    </div>
+      <main>
+        <Suspense fallback={<CircularProgress />}>
+          <Switch>
+            <Route path="/" exact>
+              <ProductList />
+            </Route>
+            <Route path="/cart" exact>
+              <Cart />
+            </Route>
+            <Redirect to="/" />
+          </Switch>
+        </Suspense>
+      </main>
+    </Router>
   );
-}
+};
 
 export default App;
