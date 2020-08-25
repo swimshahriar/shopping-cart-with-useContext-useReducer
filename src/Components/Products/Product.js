@@ -9,21 +9,13 @@ import {
   CardMedia,
   Button,
 } from '@material-ui/core';
-import { makeStyles } from '@material-ui/styles';
 import { AddShoppingCart } from '@material-ui/icons';
 
-const useStyle = makeStyles({
-  image: {
-    height: 100,
-  },
-  cardContent: {
-    display: 'flex',
-    justifyContent: 'space-between',
-  },
-});
+import useStyle from './ProductStyles';
 
-const Product = ({ product }) => {
+const Product = ({ product, addToCartHandler }) => {
   const classes = useStyle();
+
   return (
     <Grow in timeout={500}>
       <Grid item xs={12} sm={6} md={4} lg={3}>
@@ -47,6 +39,7 @@ const Product = ({ product }) => {
               variant="outlined"
               startIcon={<AddShoppingCart />}
               fullWidth
+              onClick={() => addToCartHandler(product)}
             >
               Add to cart
             </Button>

@@ -1,12 +1,10 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/styles';
+import React, { useContext, useState, useEffect } from 'react';
 import {
   AppBar,
   Toolbar,
   Typography,
   IconButton,
   Badge,
-  createMuiTheme,
 } from '@material-ui/core';
 import {
   Storefront as StoreIcon,
@@ -14,22 +12,23 @@ import {
 } from '@material-ui/icons';
 import { useHistory } from 'react-router-dom';
 
-const theme = createMuiTheme({
-  spacing: 10,
-});
-
-const useStyles = makeStyles(() => ({
-  menuButton: {
-    marginRight: theme.spacing(2),
-  },
-  title: {
-    flexGrow: 1,
-  },
-}));
+import { CartContext } from '../../Context/CartContext';
+import useStyles from './HeaderStyles';
 
 const Header = () => {
+  const [itemCount, setItemCount] = useState(0);
   const classes = useStyles();
   const history = useHistory();
+  const cartContext = useContext(CartContext);
+
+  // updating itemCount state
+  useEffect(() => {
+    let itemCount = 0;
+    cartContext.cart.forEach((item) => {
+      itemCount += item.quantity;
+    });
+    setItemCount(itemCount);
+  }, [cartContext.cart]);
 
   return (
     <AppBar position="static">
@@ -48,7 +47,7 @@ const Header = () => {
         </Typography>
 
         <IconButton color="inherit" onClick={() => history.push('/cart')}>
-          <Badge badgeContent="2" color="secondary" showZero>
+          <Badge badgeContent={itemCount} color="secondary" showZero>
             <CartIcon />
           </Badge>
         </IconButton>
